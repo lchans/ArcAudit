@@ -1,0 +1,30 @@
+<html>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<body>
+	<div class="row">
+	  <div class="col-md-6">
+	  			<button class="btn btn-success">Passed societies</button><br>
+		  		{% for failure in fail  %}		  		
+		  			{% if fail[failure] == "Passed" %}
+	        			{{ failure }}
+	        		<br>
+	        		{% endif %}
+	    		{% endfor %}    		
+	  	</div>
+	  <div class="col-md-6">
+	  		  	<button class="btn btn-danger">Failed societies</button><br>
+		  		{% for failure in fail  %}		  		
+		  			{% if fail[failure] != "Passed" %}
+	        			<b>{{ failure }}</b><br>
+	        			{% for m in member[failure]  %}
+	        				{{ m }} <i>{{member[failure][m]}}</i><br>
+	        			{% endfor %}
+	        		{% endif %}
+	    		{% endfor %} 
+	  </div>
+	</div>
+</body>
+</html>
