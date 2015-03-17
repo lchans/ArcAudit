@@ -15,21 +15,22 @@ from StringIO import StringIO
 app = Flask(__name__)
 
 @app.route('/import', methods= ['POST']) 
-def import_objects(): 
+def import_objects():
+	audit = request.files['audit'].read() 
+	members = request.files['members'].read()
+	passed, failed, clubs = generate_audit(audit, members)
+	return render_template('index.html', passed=passed, failed=failed, clubs=clubs)
 
+def generate_audit(audit, members):
 	memberships = ""
 	failed = {}
 	passed = {}
 	clubs = {}
 
-	audit = request.files['audit'].read() 
-	members = request.files['members'].read()
 	audit = StringIO(audit) 
 	audit = csv.DictReader(audit, delimiter=',') 
 	members = StringIO(members) 
 	members = csv.DictReader(members, delimiter=',')
-
-
 
 	for row in members: 
 		group = row["Groups"]
@@ -53,22 +54,17 @@ def import_objects():
 						failed[name][row[number]] = row[full]
 					else: 
 						passed[name][row[number]] = row[full]
+	return passed, failed, clubs
 
-	return render_template('index.html', passed=passed, failed=failed, clubs=clubs)
-
-
-#@app.route('/download')
-#def download():
-	#csv = ""
-	''' 
+@app.route('/download', methods= ['POST'])
+def download():
 	si = StringIO()
 	cw = csv.writer(si)
-	for row in audit: 
+	for row in request.form['clubs']: 
 		cw.writerow([row["Submission ID"], row["Portal"]])
-	'''
-    #response = make_response(csv)
-    #response.headers["Content-Disposition"] = "attachment; filename=books.csv"
-    #return response
+	response = make_response(cw)
+	response.headers["Content-Disposition"] = "attachment; filename=books.csv"
+	return response
 
 @app.route('/')
 def my_form():

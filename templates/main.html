@@ -5,18 +5,30 @@
   </head>
   <body>
    <div class="container">
-    <div class="header">
-     <h3 class="text-muted">Executive Audit List</h3>
-    </div>
-    <hr/>
     <div>
-      <form action="/import" method="post" enctype="multipart/form-data">
-      	<h3> Audit list </h3> 
-       <input type="file" name="audit"><br /><br />
-       <h3> Arc Members List </h3> 
-       <input type="file" name="members"><br /><br />
-       <input type="submit" value="Upload">
-      </form>
+		<div class="row">
+			<div class="col-md-offset-3 col-md-3">
+				<h2> Generate Page </h2>
+				<form action="/import" method="post" enctype="multipart/form-data">
+				<h3> Audit list </h3> 
+				<input type="file" name="audit"><br /><br />
+				<h3> Arc Members List </h3> 
+				<input type="file" name="members"><br /><br />
+				<input type="submit" value="Upload">
+				</form>
+			</div>
+
+			<div class=" col-md-3">
+				<h2> Generate CSV </h2>
+				<form action="/generate" method="post" enctype="multipart/form-data">
+				<h3> Audit list </h3> 
+				<input type="file" name="audit"><br /><br />
+				<h3> Arc Members List </h3> 
+				<input type="file" name="members"><br /><br />
+				<input type="submit" value="Upload">
+				</form>
+			</div>
+		</div>
     </div>
    </div>
   </body>
