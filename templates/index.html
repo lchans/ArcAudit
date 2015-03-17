@@ -5,26 +5,28 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 <body>
 	<div class="row">
-	  <div class="col-md-6">
-	  			<button class="btn btn-success">Passed societies</button><br>
-		  		{% for failure in fail  %}		  		
-		  			{% if fail[failure] == "Passed" %}
-	        			{{ failure }}
-	        		<br>
-	        		{% endif %}
-	    		{% endfor %}    		
+	  <div class="col-md-offset-3 col-md-6">
+	  			<center>
+	  			<a href="/download">Generate CSV!</a>
+	  			{% for club in clubs %} 
+	  				<h3>Society: {{ club }}</h3>  
+	  					<div class="row">
+	  						<div class="col-md-6">
+							<button class="btn btn-sm btn-success">Passed Members:</button><br> 
+							{% for executive in passed[club] %} 
+								Name: {{ passed[club][executive] }},  {{  executive }}<br>
+							{% endfor %}
+							</div>
+							<div class="col-md-6">
+							<button class="btn btn-sm btn-danger">Failed Members:</button><br>
+							{% for executive in failed[club] %} 
+								Name: {{ failed[club][executive] }},  {{  executive }}<br>
+							{% endfor %}
+							</div>
+						</div>
+	  			{% endfor %}
+	  			</center>
 	  	</div>
-	  <div class="col-md-6">
-	  		  	<button class="btn btn-danger">Failed societies</button><br>
-		  		{% for failure in fail  %}		  		
-		  			{% if fail[failure] != "Passed" %}
-	        			<b>{{ failure }}</b><br>
-	        			{% for m in member[failure]  %}
-	        				{{ m }} <i>{{member[failure][m]}}</i><br>
-	        			{% endfor %}
-	        		{% endif %}
-	    		{% endfor %} 
-	  </div>
 	</div>
 </body>
 </html>

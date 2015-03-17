@@ -1,13 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-<body>
-	<center>
-	<form action="/" method="post" enctype="multipart/form-data">
-       <input type="file" name="exec"><br /><br />
+  <head>
+   <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+  <body>
+   <div class="container">
+    <div class="header">
+     <h3 class="text-muted">Executive Audit List</h3>
+    </div>
+    <hr/>
+    <div>
+      <form action="/import" method="post" enctype="multipart/form-data">
+      	<h3> Audit list </h3> 
        <input type="file" name="audit"><br /><br />
+       <h3> Arc Members List </h3> 
+       <input type="file" name="members"><br /><br />
        <input type="submit" value="Upload">
       </form>
-	</center>
-</body>
+    </div>
+   </div>
+  </body>
 </html>
