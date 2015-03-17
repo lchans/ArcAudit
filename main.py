@@ -15,11 +15,56 @@ from StringIO import StringIO
 app = Flask(__name__)
 
 @app.route('/import', methods= ['POST']) 
-def import_objects():
-	audit = request.files['audit'].read() 
-	members = request.files['members'].read()
-	passed, failed, clubs = generate_audit(audit, members)
+def generate_page():
+	audit = request.files['audit']
+	members = request.files['members']
+	passed, failed, clubs, memberships = generate_audit(audit, members)
 	return render_template('index.html', passed=passed, failed=failed, clubs=clubs)
+
+@app.route('/generate', methods= ['POST'])
+def generate_csv():
+	audit = request.files['audit']
+	members = request.files['members']
+	audit = StringIO(audit.read()) 
+	audit = csv.reader(audit, delimiter=',') 
+	members = StringIO(members.read()) 
+	members = csv.DictReader(members, delimiter=',')
+
+	rows = [] 
+	columns = []
+
+	memberships = generate_membership_list(members)
+
+	excel = " "
+	for row in audit: 
+		count = 0
+		for col in row: 
+			arc = count % 4
+			if count >= 13 and arc == 1 and not re.search("\w", col):
+				if re.search(row[count-1], memberships) and re.search("\w", row[count-1]):
+					excel = excel + "Yes" + ","
+				elif not re.search(row[count-1], memberships): 
+					excel = excel + "No" + ","
+				else: 
+					excel = excel + ","
+			else: 
+				excel = excel + col + ","
+			count = count + 1
+		excel = excel + "\n"
+
+	response = make_response(excel)
+	response.headers["Content-Disposition"] = "attachment; filename=books.csv"
+	return response
+
+
+def generate_membership_list (members):
+	memberships = ""
+	for row in members: 
+		group = row["Groups"]
+		number = row["Student ID"]
+		if re.search("2015 Active Member", group):
+			memberships += number
+	return memberships
 
 def generate_audit(audit, members):
 	memberships = ""
@@ -27,16 +72,12 @@ def generate_audit(audit, members):
 	passed = {}
 	clubs = {}
 
-	audit = StringIO(audit) 
+	audit = StringIO(audit.read()) 
 	audit = csv.DictReader(audit, delimiter=',') 
-	members = StringIO(members) 
+	members = StringIO(members.read()) 
 	members = csv.DictReader(members, delimiter=',')
 
-	for row in members: 
-		group = row["Groups"]
-		number = row["Student ID"]
-		if re.search("2015 Active Member", group):
-			memberships += number
+	memberships = generate_membership_list (members)
 
 	for row in audit: 
 		name = row["Portal"]
@@ -54,7 +95,7 @@ def generate_audit(audit, members):
 						failed[name][row[number]] = row[full]
 					else: 
 						passed[name][row[number]] = row[full]
-	return passed, failed, clubs
+	return passed, failed, clubs, memberships
 
 @app.route('/download', methods= ['POST'])
 def download():
