@@ -30,6 +30,8 @@ def generate_csv():
 	members = StringIO(members.read()) 
 	members = csv.DictReader(members, delimiter=',')
 
+	generated_rows = [] 
+	generated_columns = []
 	rows = [] 
 	columns = []
 
@@ -38,19 +40,23 @@ def generate_csv():
 	excel = " "
 	for row in audit: 
 		count = 0
+		generated_columns = []
 		for col in row: 
 			arc = count % 4
 			if count >= 13 and arc == 1 and not re.search("\w", col):
 				if re.search(row[count-1], memberships) and re.search("\w", row[count-1]):
-					excel = excel + "Yes" + ","
+				 	generated_columns.append("Yes")
 				elif not re.search(row[count-1], memberships): 
-					excel = excel + "No" + ","
-				else: 
-					excel = excel + ","
+					generated_columns.append("No")
 			else: 
-				excel = excel + col + ","
+				generated_columns.append(col)
 			count = count + 1
-		excel = excel + "\n"
+		generated_rows.append(generated_columns)
+
+	for row in generated_rows: 
+		for col in row: 
+			excel = excel + col + ","
+		excel = excel +  "\n"
 
 	response = make_response(excel)
 	response.headers["Content-Disposition"] = "attachment; filename=books.csv"
