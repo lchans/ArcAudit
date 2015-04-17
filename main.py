@@ -1,14 +1,14 @@
 # Import the Flask Framework
-from flask import Flask
 import xlrd 
 import re
+import csv
+import io
+from flask import Flask
 from flask import redirect
 from flask import url_for
 from flask import render_template
 from flask import request
 from flask import make_response
-import csv
-import io
 from StringIO import StringIO 
 
 
@@ -18,8 +18,13 @@ app = Flask(__name__)
 def generate_page():
 	audit = request.files['audit']
 	members = request.files['members']
+	if not allowed_file(audit.filename) or not allowed_file(members.filename):
+		return render_template('main.html', error="true")
 	passed, failed, clubs, memberships = generate_audit(audit, members)
-	return render_template('index.html', passed=passed, failed=failed, clubs=clubs)
+	return render_template('index.html', error ="false", passed=passed, failed=failed, clubs=clubs)
+
+def allowed_file(filename):
+	return re.search(".csv", filename)
 
 @app.route('/generate', methods= ['POST'])
 def generate_csv():
@@ -42,25 +47,29 @@ def generate_csv():
 		count = 0
 		generated_columns = []
 		for col in row: 
-			arc = count % 4
-			if count >= 13 and arc == 1 and not re.search("\w", col):
-				if re.search(row[count-1], memberships) and re.search("\w", row[count-1]):
+			if count >= 13 and count % 4 == 1 and not re.search("\w", col):
+				print row[count-1].lower()
+				if re.search(row[count-1].lower(), memberships) and re.search("\w", row[count-1]):
 				 	generated_columns.append("Yes")
-				elif not re.search(row[count-1], memberships): 
+				elif not re.search(row[count-1].lower(), memberships): 
 					generated_columns.append("No")
 			else: 
 				generated_columns.append(col)
 			count = count + 1
 		generated_rows.append(generated_columns)
 
-	for row in generated_rows: 
+	response = make_response(generate_csv_string(generated_rows))
+	response.headers["Content-Disposition"] = "attachment; filename=books.csv"
+	return response
+
+
+def generate_csv_string(document): 
+	excel = ""
+	for row in document: 
 		for col in row: 
 			excel = excel + col + ","
 		excel = excel +  "\n"
-
-	response = make_response(excel)
-	response.headers["Content-Disposition"] = "attachment; filename=books.csv"
-	return response
+	return excel
 
 
 def generate_membership_list (members):
@@ -97,22 +106,12 @@ def generate_audit(audit, members):
 				number = "Executive " + digit + ": Student Number"
 				if re.search("\w", row[full]) and re.search("\w", row[number]):	
 					clubs[name][row[number]] = row[full]
-					if not re.search(row[number], memberships): 
+					if not re.search(row[number].lower(), memberships): 
 						failed[name][row[number]] = row[full]
 					else: 
 						passed[name][row[number]] = row[full]
 	return passed, failed, clubs, memberships
 
-@app.route('/download', methods= ['POST'])
-def download():
-	si = StringIO()
-	cw = csv.writer(si)
-	for row in request.form['clubs']: 
-		cw.writerow([row["Submission ID"], row["Portal"]])
-	response = make_response(cw)
-	response.headers["Content-Disposition"] = "attachment; filename=books.csv"
-	return response
-
 @app.route('/')
 def my_form():
-    return render_template('main.html')
+    return render_template('main.html', error="false")

@@ -8,25 +8,19 @@
     <div>
 		<div class="row">
 			<div class="col-md-offset-3 col-md-3">
-				<h2> Generate Page </h2>
-				<form action="/import" method="post" enctype="multipart/form-data">
-				<h3> Audit list </h3> 
-				<input type="file" name="audit"><br /><br />
-				<h3> Arc Members List </h3> 
-				<input type="file" name="members"><br /><br />
-				<input type="submit" value="Upload">
-				</form>
-			</div>
-
-			<div class=" col-md-3">
-				<h2> Generate CSV </h2>
-				<form action="/generate" method="post" enctype="multipart/form-data">
-				<h3> Audit list </h3> 
-				<input type="file" name="audit"><br /><br />
-				<h3> Arc Members List </h3> 
-				<input type="file" name="members"><br /><br />
-				<input type="submit" value="Upload">
-				</form>
+				{% if error == "true" %}
+					<center><button class="btn btn-danger">Error in input</button></center> 
+				{% endif %}
+					<h2> Membership Audit </h2>
+					<form method="post" enctype="multipart/form-data">
+					<h3> Audit list </h3> 
+					<input type="file" name="audit"><br /><br />
+					<h3> Arc Members List </h3> 
+					<input type="file" name="members"><br /><br />
+					<input type="submit" formaction="/import" value="View">
+					<input type="submit" formaction="/generate" value="Generate CSV">
+					</form>
+				
 			</div>
 		</div>
     </div>
