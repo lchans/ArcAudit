@@ -9,7 +9,6 @@
   <body background="http://www.arc.unsw.edu.au/images/bg-2015-WE.jpg">
 
 <div class="container">
-
     <div class="row vertical-offset-100">
     	<div class="col-md-4 col-md-offset-4">
     		<div class="panel panel-default">
@@ -17,15 +16,13 @@
 			    	<h3 class="panel-title">Arc @ UNSW Clubs Membership Audit 2015</h3>
 			 	</div>
 			  	<div class="panel-body">
-			    	
-			    	  
-				<center>
-				{% if error == "true" %}
+					<center>
+					{% if error == "true" %}
 					<!-- <center><button class="btn btn-danger">Error in input</button></center> -->
-				{% endif %}
+					{% endif %}
 					<form method="post" enctype="multipart/form-data">
 						<h3 style="display: inline;"> Audit list</h3> 
-						<span id="hello" class="glyphicon glyphicon-question-sign"></span><p><p>
+						<span class="hello glyphicon glyphicon-question-sign"></span><p><p>
 						<div class="input-group">
 							<span class="input-group-btn">
 							<span class="btn btn-default btn-file">
@@ -35,7 +32,7 @@
 							<input  class="form-control" type="text" class="form-control" readonly>
 						</div><br>
 						<h3 style="display: inline;"> Arc Members List </h3> 
-						<span id="hello" class="glyphicon glyphicon-question-sign"></span><br><br>
+						<span class="hello glyphicon glyphicon-question-sign"></span><br><br>
 						<div class="input-group">
 							<span class="input-group-btn">
 							<span class="btn btn-default btn-file">
@@ -44,11 +41,10 @@
 							</span>
 							<input  class="form-control" type="text" class="form-control" readonly>
 						</div><br>
-						<input class="btn btn-danger btn-file" type="submit" formaction="/import" value="View">
-						<input class="btn btn-danger btn-file" type="submit" formaction="/generate" value="Generate CSV">
+						<input class="btn btn-default btn-file" type="submit" formaction="/import" value="View">
+						<input class="btn btn-default btn-file" type="submit" formaction="/generate" value="Generate CSV">
 					</form>
-				</center>
-			    
+					</center>
 			    </div>
 			</div>
 		</div>
@@ -60,21 +56,18 @@
 
 
 
-
-
-			</div>
-		</div>
-
-
-
-
 <!-- Modal -->
-	<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal" id="myModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 	<div class="modal-content">
 	<div class="modal-header">
-	<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="text-danger fa fa-times"></i></button>
-	<h4 class="modal-title" id="myModalLabel"><i class="text-muted fa fa-shopping-cart"></i> <strong>02051</strong> - Nome do Produto </h4>
+	<b>Obtaining the Audit form: </b>
+		<ol>
+		<li>Arc @ UNSW Orgsync Portal > Forms</li>
+		<li>Clubs Exec Membership Audit 2015</li>
+		<li>Export > Export as XLSX</li>
+		<li>Import below</li>
+	</ol>
 	</div>       
 	</div>
 	</div>
@@ -83,18 +76,7 @@
 
  <script type="text/javascript">
 $(function () {
-    /* BOOTSNIPP FULLSCREEN FIX */
-    if (window.location == window.parent.location) {
-        $('#back-to-bootsnipp').removeClass('hide');
-        $('.alert').addClass('hide');
-    } 
-    
-    $('#fullscreen').on('click', function(event) {
-        event.preventDefault();
-        window.parent.location = "http://bootsnipp.com/iframe/Q60Oj";
-    });
-    
-    $('#hello').on('click', function(event) {
+    $('.hello').on('click', function(event) {
         event.preventDefault();
         $('#myModal').modal('show');
     })
