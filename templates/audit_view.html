@@ -1,0 +1,52 @@
+<html>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+  <body background="http://www.arc.unsw.edu.au/images/bg-2015-WE.jpg">
+
+
+
+<div class="container">
+<div class="row vertical-offset-100">
+<div class="col-md-6 col-md-offset-3">
+<div class="panel panel-default">
+<div class="panel-heading">
+<h3 class="panel-title">Arc @ UNSW Clubs Membership Audit 2015</h3>
+</div>
+<div class="panel-body  pre-scrollable">
+
+<div class="row">
+<center>
+</form>
+{% for club in clubs %} 
+<h3>Society: {{ club }}</h3>  
+<div class="row">
+<div class="col-md-6">
+<button class="btn btn-sm btn-success">Passed Members:</button><br> 
+{% for executive in passed[club] %} 
+{{ passed[club][executive] }},  {{  executive }}<br>
+{% endfor %}
+</div>
+<div class="col-md-6">
+<button class="btn btn-sm btn-danger">Failed Members:</button><br>
+{% for executive in failed[club] %} 
+{{ failed[club][executive] }},  {{  executive }}<br>
+{% endfor %}
+</div>
+</div>
+{% endfor %}
+</center>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+
+
+</body>
+</html>

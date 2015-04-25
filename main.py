@@ -21,7 +21,7 @@ def generate_page():
 	if not allowed_file(audit.filename) or not allowed_file(members.filename):
 		return render_template('main.html', error="true")
 	passed, failed, clubs, memberships = generate_audit(audit, members)
-	return render_template('index.html', error ="false", passed=passed, failed=failed, clubs=clubs)
+	return render_template('audit_view.html', error ="false", passed=passed, failed=failed, clubs=clubs)
 
 def allowed_file(filename):
 	return re.search(".csv", filename)
@@ -114,4 +114,4 @@ def generate_audit(audit, members):
 
 @app.route('/')
 def my_form():
-    return render_template('main.html', error="false")
+    return render_template('index.html', error="false")
